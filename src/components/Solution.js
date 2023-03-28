@@ -4,11 +4,13 @@ export default function Solution(props) {
 
     const wordLettersArr = props.solution.word.split('')
 
+    const letterClicked = () => alert('No peeking')
+
     const displayLetter = function(letter){
         if(props.letterStatus[letter]){
-            return <Letter letter={letter} key={letter} className={'word'}/>
+            return <Letter letter={letter} key={letter} className={'word'} selectLetter={letterClicked}/>
         }else{
-            return <Letter letter={'_'} className={'word'}/>
+            return <Letter letter={'_'} className={'word'} key={`_${letter}`} selectLetter={letterClicked}/>
         }
     }
 
