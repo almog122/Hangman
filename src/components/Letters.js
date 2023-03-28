@@ -1,5 +1,21 @@
 import Letter from "./Letter";
 
-const Letters = () => <div>.... //Eventually we will display all the available letters here: A - Z <Letter></Letter></div>
+export default function Letters(props) {
 
-export default Letters
+    const letters = Object.keys(props.letterStatus)
+
+    const displayLetter = function(letter){
+        if(props.letterStatus[letter]){
+            return <Letter letter={letter} key={letter} className={'selected'}/>
+        }else{
+            return <Letter letter={letter} key={letter} className={'notSelected'}/>
+        }
+    }
+
+    return (
+      <div>
+        <div>Available Letters</div>
+        <div>{letters.map(letter => displayLetter(letter))}</div>
+      </div>
+    );
+  }

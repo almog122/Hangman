@@ -1,6 +1,21 @@
+import Letter from "./Letter";
 
-const solutionArr = [' _ ',' _ ',' _ ',' _ ',' _']
+export default function Solution(props) {
 
-const Solution = () => <div> {solutionArr.map((underscore) => underscore )} </div>
+    const wordLettersArr = props.solution.word.split('')
 
-export default Solution
+    const displayLetter = function(letter){
+        if(props.letterStatus[letter]){
+            return <Letter letter={letter} key={letter} className={'word'}/>
+        }else{
+            return <Letter letter={'_'} className={'word'}/>
+        }
+    }
+
+    return (
+        <div>
+            <div> Word : {wordLettersArr.map(letter => displayLetter(letter))}</div>
+            <div> Hint : {props.solution.hint}  </div> 
+        </div>
+    );
+  }

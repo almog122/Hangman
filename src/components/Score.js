@@ -1,4 +1,6 @@
 
-const Score = () => <div> 100 </div>
-
-export default Score
+export default function Score(props) {
+    return (
+        <div>  {props.score}  </div> 
+    );
+  }
