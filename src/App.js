@@ -1,11 +1,12 @@
 import Score from "./components/Score";
 import Solution from "./components/Solution";
 import Letters from "./components/Letters";
+import EndGame from "./components/EndGame";
 import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const SCORE_STEP = 5;
+  const SCORE_STEP = 20;
 
   const generateLetterStatuses = function () {
     let letterStatus = {};
@@ -71,15 +72,29 @@ function App() {
 
     return 'low-score'
   }
-  
 
-  // const generateRandomWord = async function () {
-  //   const word = await $.get('https://random-word-api.herokuapp.com/worw')
-  //   return
-  // }
+  const isGameWon = function(){
+    let isUserWon = true;
+    for(let letter of wordLettersArr) {
+      isUserWon = isUserWon && letterStatus[letter]
+    }
 
-  return (
-    <div>
+    return isUserWon
+  }
+
+  const isGameLost = function(){
+    if(score.points <= 0){
+      return true
+    }
+
+    return false
+  }
+
+  const hangmanState = function(){
+    if(isGameWon() || isGameLost()){
+      return <div> <EndGame isGameWon={isGameWon() ? true : false} word={solution.word}/></div>
+    }else{
+      return <div>
       <Score score={score} key={"score"} />
       <Solution
         letterStatus={letterStatus}
@@ -92,6 +107,20 @@ function App() {
         selectLetter={selectLetter}
         key={"letters"}
       />
+    </div>
+    }
+
+  }
+  
+
+  // const generateRandomWord = async function () {
+  //   const word = await $.get('https://random-word-api.herokuapp.com/worw')
+  //   return
+  // }
+
+  return (
+    <div>
+      {hangmanState()}
     </div>
   );
 }

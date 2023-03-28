@@ -6,4 +6,4 @@ export default function Letter(props) {
     return (
         <span className={props.className} onClick={clickOnLetter}>  {props.letter}  </span> 
     );
-  }
+}
