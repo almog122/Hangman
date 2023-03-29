@@ -6,6 +6,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const STARTING_POINTS = 100;
   const SCORE_STEP = 20;
 
   const generateLetterStatuses = function () {
@@ -24,7 +25,7 @@ function App() {
   };
 
   const [score, setScore] = useState({
-    points: 100,
+    points: STARTING_POINTS,
     colorClass: `high-score`
   });
 
@@ -40,10 +41,10 @@ function App() {
   };
 
   const updateScore = function (letter) {
-    const isLetterInWord = wordLettersArr.findIndex(l => l === letter);
+    const isLetterInWord = wordLettersArr.find(l => l === letter);
     let newScorePoints;
 
-    if (isLetterInWord >= 0) {
+    if (isLetterInWord !== undefined) {
       newScorePoints = score.points + SCORE_STEP
       const newScore = {
         points: newScorePoints,
@@ -90,37 +91,42 @@ function App() {
     return false
   }
 
-  const hangmanState = function(){
+  const isGameOver = function(){
     if(isGameWon() || isGameLost()){
-      return <div> <EndGame isGameWon={isGameWon() ? true : false} word={solution.word}/></div>
-    }else{
-      return <div>
-      <Score score={score} key={"score"} />
-      <Solution
-        letterStatus={letterStatus}
-        solution={solution}
-        key={"solution"}
-      />
-
-      <Letters
-        letterStatus={letterStatus}
-        selectLetter={selectLetter}
-        key={"letters"}
-      />
-    </div>
+      return true
     }
 
+    return false
+  }
+
+  const restartGame = function(){
+    setLetterStatus(generateLetterStatuses())
+    const newScore = {
+      points: STARTING_POINTS,
+      colorClass: updateScoreColor(STARTING_POINTS)
+    }
+    setScore(newScore);
   }
   
-
-  // const generateRandomWord = async function () {
-  //   const word = await $.get('https://random-word-api.herokuapp.com/worw')
-  //   return
-  // }
-
   return (
     <div>
-      {hangmanState()}
+      {isGameOver() ? 
+      <div> 
+        <EndGame isGameWon={isGameWon()} word={solution.word} points={score.points} restartGame={restartGame}/>
+      </div> :
+      <div>
+        <Score score={score} key={"score"} />
+        <Solution
+          letterStatus={letterStatus}
+          solution={solution}
+          key={"solution"}
+        />
+        <Letters
+          letterStatus={letterStatus}
+          selectLetter={selectLetter}
+          key={"letters"}
+        />
+      </div>}
     </div>
   );
 }
